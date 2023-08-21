@@ -34,8 +34,8 @@ Citizen.CreateThread(function()
 			if distance <= 1.8 then
 				-- print('Entra?')
 				if IsControlJustPressed(0,38) then
-					print('Entra?')
-					print(cnFP.checkPresidiario())
+					-- print('Entra?')
+					-- print(cnFP.checkPresidiario())
 					if cnFP.checkPresidiario() then
 						if not process then
 							TriggerEvent('cancelando',true)
@@ -115,7 +115,7 @@ RegisterNUICallback("ButtonClick", function( data, res)
 	-- vRP._stopAnim(false)
 	cFG.stopanimProcure()
 	if cFG.AvisarPolicia then
-		local ativa = cnFP.chamouPoliciaFuga()
+	   local ativa = cnFP.chamouPoliciaFuga()
 	end
 	cnFP.fuga()
  end)
