@@ -123,7 +123,7 @@ Citizen.CreateThread(function()
         -- if not HasStreamedTextureDictLoaded("marker") then
 		-- 	RequestStreamedTextureDict("marker", true)
 		-- 	while not HasStreamedTextureDictLoaded("marker") do
-		-- 		Wait(1)
+		-- 		Wait(1) 
 		-- 	end
         -- else
             local idle = 1000
