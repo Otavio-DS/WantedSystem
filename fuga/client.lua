@@ -56,12 +56,12 @@ Citizen.CreateThread(function()
 								if cFG.percent >=  math.random(1,100) then
 									cnFP.itemEncontrado()
 									if cFG.DiminuirTempo then
-										TriggerServerEvent("elite_diminuirPena")
+										TriggerServerEvent("ds:downSentence")
 									end
 								else 
 									cnFP.nadaEncontrado()
 									if cFG.DiminuirTempo then
-										TriggerServerEvent("elite_diminuirPena")
+										TriggerServerEvent("ds:downSentence")
 									end
 								end 
 								loc =  math.random(1,cFG.pontos)

@@ -7,8 +7,8 @@ local cFG = module("elite_wanted", "fuga")
 cnFP = {}
 Tunnel.bindInterface("elite_fuga",cnFP)
 
-RegisterServerEvent("elite_diminuirPena") 
-AddEventHandler("elite_diminuirPena",function()
+RegisterServerEvent("ds:downSentence") 
+AddEventHandler("ds:downSentence",function()
 	local source = source
 	local user_id = getUserId(source)
 	local value = getUData(parseInt(user_id),"vRP:prisao")
@@ -71,8 +71,8 @@ function cnFP.fuga() -- Função que faz a fuga do player
         setUData(user_id, "vRP:prisao",json.encode(parseInt(-100))) -- Tira o tempo de cadeia do banco de dados
         if cFG.foragido then -- Define se vai setar como foragido ou não
             TriggerClientEvent('prisioneiro',source,false)
-            setUData(user_id,"vRP:Procurado",99999999999) -- Seta o tempo de procurado
-            TriggerClientEvent('Procurado:IniciouProcura',source,true) -- Puxa o evento para setar procurado
+            setUData(user_id,"DosSantos:Procurado",99999999999) -- Seta o tempo de procurado
+            TriggerClientEvent('DS:IniciouProcura',source,true) -- Puxa o evento para setar procurado
             setUData(user_id, "vRP:prisao",json.encode(parseInt(-100))) 
             TriggerClientEvent('RemovePrision',source)
         end     
@@ -80,7 +80,7 @@ function cnFP.fuga() -- Função que faz a fuga do player
             vRP.execute('creative/set_prison',{ user_id = parseInt(user_id), prison = -100 }) 
         end
         if cFG.AvisarPolicia then
-            TriggerClientEvent('Procurado:ChecarProcurados',source) -- Checa os procurado
+            TriggerClientEvent('ds:ChecarProcurados',source) -- Checa os procurado
         end
         TriggerClientEvent('Notify',source, cFG.notify['sucesso'], 'Aguarde para ser levado até o local',15000 )
         Citizen.Wait(5000)
@@ -111,19 +111,3 @@ function cnFP.chamouPoliciaFuga()
         end
     end
 end
-
-AddEventHandler('onResourceStart', function(resourceName)
-	if (GetCurrentResourceName() ~= resourceName) then
-	  return
-	end
-	print(resourceName,'^2INICIADO^0')
-	Wait(10000)
-	print( "[+] ^2Autenticado^0 - Qualquer dúvida entre em contato com -> ^4dossantosrp.")
-end)
-
-AddEventHandler('onResourceStop', function(resourceName)
-	if (GetCurrentResourceName() ~= resourceName) then
-	  return
-	end
-	print(resourceName,'^1PARADO^0')
-end)

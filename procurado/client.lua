@@ -7,14 +7,14 @@ vRP = Proxy.getInterface("vRP")
 elite = Tunnel.getInterface("elite_procurado")
 vSERVER = Tunnel.getInterface("elite_procurado")
 
-RegisterNetEvent('Procurado:IniciouProcura')
-AddEventHandler('Procurado:IniciouProcura', function(time)
-    TriggerEvent('wanted:startWanted',99999999999)
+RegisterNetEvent('DS:IniciouProcura')
+AddEventHandler('DS:IniciouProcura', function(time)
+    TriggerEvent('DS:startWante',99999999999)
 end)
 
-RegisterNetEvent('tirandoprocurado')
-AddEventHandler('tirandoprocurado', function()
-    TriggerEvent('wanted:removeWanted')
+RegisterNetEvent('ds:tirandoprocurado')
+AddEventHandler('ds:tirandoprocurado', function()
+    TriggerEvent('ds:removeWanted')
 end)
 ------------------------------------------------------------------------------------
 -- variavery
@@ -24,21 +24,20 @@ local wantedSeconds = 0
 ------------------------------------------------------------------------------------
   -- startWanted
 ------------------------------------------------------------------------------------
-RegisterNetEvent('wanted:startWanted')
-AddEventHandler('wanted:startWanted', function(time)
+RegisterNetEvent('DS:startWante')
+AddEventHandler('DS:startWante', function(time)
     if wantedSeconds == 0 then
-        juia = tonumber(time) 
-        wantedSeconds = juia
+        timing = tonumber(time) 
+        wantedSeconds = timing
         wanted = true
-        elite.addList()
         TriggerEvent('Notify', 'aviso', textovcestaprocurado)
     end
 end)
 ------------------------------------------------------------------------------------
 -- removeWanted
 ------------------------------------------------------------------------------------
-RegisterNetEvent('wanted:removeWanted')
-AddEventHandler('wanted:removeWanted', function(time)
+RegisterNetEvent('ds:removeWanted')
+AddEventHandler('ds:removeWanted', function(time)
     if wantedSeconds > 0 then
         TriggerEvent('Notify', 'sucesso', textonprocurado)
         wantedSeconds = 0
@@ -46,24 +45,11 @@ AddEventHandler('wanted:removeWanted', function(time)
     end
 end)
 
--- Citizen.CreateThread(function()
---     while true do
---     local sleep = 1000
---     if wanted then
---         sleep = 100
---         vSERVER.chamouPolicia1() -- Faz a função de chaamar a polícia
---         if Avisar then -- If para decidir de o player vai ou não saber se a polícia foi chamada
---             TriggerEvent('Notify', 'aviso',textolocalizado)
---         end
---     end
---     Wait(sleep)
--- end)
-
 ------------------------------------------------------------------------------------
 -- Verifica se está procurado
 ------------------------------------------------------------------------------------
-RegisterNetEvent('Procurado:ChecarProcurados')
-AddEventHandler('Procurado:ChecarProcurados', function()
+RegisterNetEvent('ds:ChecarProcurados')
+AddEventHandler('ds:ChecarProcurados', function()
     if wanted then
         vSERVER.chamouPolicia1() -- Faz a função de chaamar a polícia
         if Avisar then -- If para decidir de o player vai ou não saber se a polícia foi chamada
@@ -71,19 +57,7 @@ AddEventHandler('Procurado:ChecarProcurados', function()
         end
     end
 end)
-------------------------------------------------------------------------------------
--- Tentou Hacker o sistema
-------------------------------------------------------------------------------------
--- RegisterNetEvent('Procurado:falhouHacker')
--- AddEventHandler('Procurado:falhouHacker', function()
---     if wanted then
---         if AvisarHack then -- If para chamar a polícia ou se falhar o hack
---             print('aqui?')
---             vSERVER.chamouPolicia2()
---             TriggerEvent('Notify', 'aviso',textolocalizado2)
---         end
---     end
--- end)
+
 ------------------------------------------------------------------------------------
 -- Faz a verificação se está procurado de tempo em tempo
 ------------------------------------------------------------------------------------
@@ -119,13 +93,6 @@ end)
 ------------------------------------------------------------------------------------
 Citizen.CreateThread(function()
 	while true do
-        -- Wait(idle)
-        -- if not HasStreamedTextureDictLoaded("marker") then
-		-- 	RequestStreamedTextureDict("marker", true)
-		-- 	while not HasStreamedTextureDictLoaded("marker") do
-		-- 		Wait(1) 
-		-- 	end
-        -- else
             local idle = 1000
             local ped = PlayerPedId()
             local pedCoords = GetEntityCoords(ped)
@@ -134,16 +101,15 @@ Citizen.CreateThread(function()
                 local distance = #(pedCoords - v['coords'])
                 if distance <= 3 then
                     idle = 5
-                    -- DrawMarker(21, v['coords'].x, v['coords'].y, v['coords'].z-0.6,0,0,0,0.0,0,0,0.5,0.5,0.4,255, 0, 0,100,0,0,0,1) 
                     config.DrawMarker(v['coords'].x, v['coords'].y, v['coords'].z)
                     if distance < 3 then
                         config.DrawText3D(v['coords'].x,v['coords'].y,v['coords'].z)
                         if IsControlJustPressed(0,config.tecla) then
                             if useTaskbar then
-                                TriggerServerEvent("item_r_Procurado")
+                                TriggerServerEvent("ds:item_r_wanted")
                             end 
                             if nTaskbar then
-                                TriggerServerEvent("item_r_ProcuradoSimples")
+                                TriggerServerEvent("ds:item_r_wantedSimples")
                             end
                         end
                     end
@@ -171,8 +137,6 @@ end
 DrawText3D = function(x,y,z, text)
     local onScreen,_x,_y=World3dToScreen2d(x,y,z)
     local px,py,pz=table.unpack(GetGameplayCamCoords())
-	-- local x,y,z = table.unpack(coords)
-    
     SetTextScale(0.35, 0.35)
     SetTextFont(4)
     SetTextProportional(1)

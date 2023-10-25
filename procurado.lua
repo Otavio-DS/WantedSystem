@@ -95,26 +95,26 @@ end
 
 -- Evento para usar o item para remover de procurado
 
-    -- TriggerEvent('item_r_ProcuradoSimples',source) -- Para retirar apenas usando o TimeOut sem taskbar
-    -- TriggerEvent('item_r_Procurado',source) -- Para retirar o procurado com Taskbar (Minigame)
+    -- TriggerEvent('ds:item_r_wantedSimples',source) -- Para retirar apenas usando o TimeOut sem taskbar
+    -- TriggerEvent('ds:item_r_wanted',source) -- Para retirar o procurado com Taskbar (Minigame)
 
 -- Evento para verificar se está procurado
 
-    -- TriggerEvent('Procurado:ChecarProcurados') -- No client-side do script que quiser que faça a verificação
-    -- TriggerClientEvent('Procurado:ChecarProcurados',user_id) -- No server-side do script que quiser que faça a verificação
+    -- TriggerEvent('ds:ChecarProcurados') -- No client-side do script que quiser que faça a verificação
+    -- TriggerClientEvent('ds:ChecarProcurados',user_id) -- No server-side do script que quiser que faça a verificação
 
 -- Evento para adicionar procurado
-    -- TriggerClientEvent('Procurado:IniciouProcura',user_id,true) -- No server-side do script que quiser que adicione como procurado (Geralmente em roubos)
-    -- TriggerEvent('Procurado:IniciouProcura',true) -- No client-side do script que quiser que adicione como procurado (Geralmente em roubos)
+    -- TriggerClientEvent('DS:IniciouProcura',user_id,true) -- No server-side do script que quiser que adicione como procurado (Geralmente em roubos)
+    -- TriggerEvent('DS:IniciouProcura',true) -- No client-side do script que quiser que adicione como procurado (Geralmente em roubos)
 
 -- Evento para remover procurado
-    -- TriggerEvent('Procurado:rProcurado',source,true)  -- No server-side do script que quiser que retire o procurado
+    -- TriggerEvent('ds:rWanted',source,true)  -- No server-side do script que quiser que retire o procurado
 
 ----------------------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------------
     -- [ Caso queira usar em algo mais específico, aqui tem um modelo simples (Sem necessidade já que existe os eventos a cima) ] 
 
---     local value = vRP.getUData(parseInt(user_id),"vRP:Procurado")
+--     local value = vRP.getUData(parseInt(user_id),"DosSantos:Procurado")
 --     local tempo = json.decode(value) or 0
 --     if tempo == 0 then
 --         -- Se receber 0 Não está procurado

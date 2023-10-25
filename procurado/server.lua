@@ -30,8 +30,8 @@ RegisterCommand('addprocurado',function(source,args,rawCommand)
         local PassaporteWanted = getUserId(playerWanted)
         local identityWanted = getUserIdentity(PassaporteWanted)
 		if playerWanted then
-			setUData(PassaporteWanted,"vRP:Procurado",99999999999)
-            TriggerClientEvent('Procurado:IniciouProcura',playerWanted,true) 
+			setUData(PassaporteWanted,"DosSantos:Procurado",99999999999)
+            TriggerClientEvent('DS:IniciouProcura',playerWanted,true) 
             TriggerClientEvent("vrp_sound:source",playerWanted,'jaildoor',0.7)
             SendWebhookMessage(config.logaddprocurado,'```prolog\n---------------[Policial que executou a ação]--------------- \n\n[Passaporte]: ' .. user_id .. ' \n[Nome]: Nome ' ..getUserNomeCompleto(user_id)..'\n\n\n---------------[Cidadão na lista de procurados]--------------- \n[Passaporte]: ' .. PassaporteWanted .. ' \n[Nome]:' ..getUserNomeCompleto(PassaporteWanted)..' \n[Registro]: '..identityWanted.registration..' \n\n[Crimes Cometidos]: ' .. crimes .. '```')
             TriggerClientEvent('Notify',source, 'sucesso', 'Passaporte ' ..PassaporteWanted..',\n\n Nome: '..getUserNomeCompleto(PassaporteWanted)..', adicionado a lista de procurados',15000)
@@ -51,8 +51,8 @@ RegisterCommand('remprocurado',function(source,args,rawCommand)
         local PassaporteWanted = getUserId(playerWanted)
         local identityWanted = getUserIdentity(PassaporteWanted)
 		if playerWanted then
-			setUData(PassaporteWanted,"vRP:Procurado",0)
-            TriggerClientEvent('tirandoprocurado',playerWanted,true)
+			setUData(PassaporteWanted,"DosSantos:Procurado",0)
+            TriggerClientEvent('ds:tirandoprocurado',playerWanted,true)
             SendWebhookMessage(config.logremprocurado,'```prolog\n---------------[Quem removeu da lista de procurados]--------------- \n\n[Passaporte]: ' .. user_id .. ' \n[Nome]: Nome ' ..getUserNomeCompleto(user_id)..'\n\n---------------[Cidadão removido da lista de procurados]--------------- \n[Passaporte]: ' .. PassaporteWanted .. ' \n[Nome]:' ..getUserNomeCompleto(PassaporteWanted)..' \n[Registro]: '..identityWanted.registration..' \n\n[Motivo da remoção]: ' .. motivo .. '```')
             TriggerClientEvent('Notify',source, 'sucesso', 'Passaporte ' ..PassaporteWanted..',\n\n Nome: '..getUserNomeCompleto(playerWanted)..', não está mais procurado',15000)
         end
@@ -71,7 +71,7 @@ RegisterCommand('procurado',function(source,args,rawCommand)
         local playerWanted = vRP.getUserSource(parseInt(args[1]))
         local PassaporteWanted = getUserId(playerWanted)
         local identityWanted = getUserIdentity(PassaporteWanted)
-        local resp4 = getUData(parseInt(PassaporteWanted),"vRP:Procurado")
+        local resp4 = getUData(parseInt(PassaporteWanted),"DosSantos:Procurado")
         local procuradop = json.decode(resp4) or 0
 
 		if procuradop > 0 then
@@ -82,7 +82,7 @@ RegisterCommand('procurado',function(source,args,rawCommand)
 
         SendWebhookMessage(config.logconsultaprocurado,'```prolog\n---------------[Policial que fez a pesquisa]--------------- \n\n[Passaporte]: ' .. user_id .. ' \n[Nome]: Nome ' ..getUserNomeCompleto(user_id)..'\n\n\n---------------[Cidadão que foi pesquisado]--------------- \n[Passaporte]: ' .. PassaporteWanted .. ' \n[Nome]:' ..getUserNomeCompleto(PassaporteWanted)..' \n[Registro]: '..identityWanted.registration..' \n\n[Motivo da procura]: ' .. motivo .. ' \n[Procurado?]: '..procuradop..'```')
 		if playerWanted then
-            local value = getUData(parseInt(user_id),"vRP:Procurado")
+            local value = getUData(parseInt(user_id),"DosSantos:Procurado")
             local tempo = json.decode(value) or 0
             if tempo == 0 then
                 TriggerClientEvent('Notify', source, 'aviso', 'Passaporte ' ..PassaporteWanted..',\n\n de nome '..getUserNomeCompleto(PassaporteWanted)..' , não consta na lista de procurados',20000)
@@ -91,34 +91,34 @@ RegisterCommand('procurado',function(source,args,rawCommand)
             
             if tempo > 0 then
                 TriggerClientEvent('Notify', source, 'aviso', 'Passaporte ' ..PassaporteWanted..',\n\n de nome '..getUserNomeCompleto(PassaporteWanted)..', consta na lista de procurados',20000)
-                TriggerClientEvent('Procurado:IniciouProcura',playerWanted,true)
+                TriggerClientEvent('DS:IniciouProcura',playerWanted,true)
             end
         end
     end
 end)
 
-RegisterServerEvent('Procurado:rProcurado') -- Evento para usar o item remover o procurado com taskbar e em lugar específico
-AddEventHandler('Procurado:rProcurado',function()
+RegisterServerEvent('ds:rWanted') -- Evento para usar o item remover o procurado com taskbar e em lugar específico
+AddEventHandler('ds:rWanted',function()
     local source = source
     local user_id = getUserId(source)
     if user_id then
-        TriggerClientEvent('tirandoprocurado',source,true)
-        TriggerEvent('remprocuradoevento',source, true)
+        TriggerClientEvent('ds:tirandoprocurado',source,true)
+        TriggerEvent('ds:remWantedEvent',source, true)
     end
 end)
 
-RegisterServerEvent('remprocuradoevento')
-AddEventHandler('remprocuradoevento',function(source,user_id)
+RegisterServerEvent('ds:remWantedEvent')
+AddEventHandler('ds:remWantedEvent',function(source,user_id)
     local source = source
     local user_id = getUserId(source)
     if user_id then
-        setUData(user_id,"vRP:Procurado",0)
+        setUData(user_id,"DosSantos:Procurado",0)
     end
 end)
 
 
-RegisterServerEvent('item_r_Procurado') -- Evento para usar o item remover o procurado com taskbar e em lugar específico
-AddEventHandler('item_r_Procurado',function()
+RegisterServerEvent('ds:item_r_wanted') -- Evento para usar o item remover o procurado com taskbar e em lugar específico
+AddEventHandler('ds:item_r_wanted',function()
     local source = source
     local user_id = getUserId(source)
     local identity = getUserIdentity(user_id)
@@ -132,9 +132,9 @@ AddEventHandler('item_r_Procurado',function()
                     config.startanim(source)
                     TriggerClientEvent("progress", source, 15000, "HACKEANDO")
                     SetTimeout(15000, function()
-                        TriggerClientEvent('tirandoprocurado',source,true)
-                        TriggerEvent('remprocuradoevento',source, true)
-                        -- setUData(user_id,"vRP:Procurado",0)
+                        TriggerClientEvent('ds:tirandoprocurado',source,true)
+                        TriggerEvent('ds:remWantedEvent',source, true)
+                        -- setUData(user_id,"DosSantos:Procurado",0)
                         TriggerClientEvent("vrp_sound:source", source, 'finish', 0.5)
                         TriggerClientEvent('cancelando', source, false)
                         config.stopanim(source)
@@ -161,8 +161,8 @@ AddEventHandler('item_r_Procurado',function()
     end
 end)
 
-RegisterServerEvent('item_r_ProcuradoSimples') -- Evento para usar o item remover o procurado sem taskbar e em lugar específico
-AddEventHandler('item_r_ProcuradoSimples',function()
+RegisterServerEvent('ds:item_r_wantedSimples') -- Evento para usar o item remover o procurado sem taskbar e em lugar específico
+AddEventHandler('ds:item_r_wantedSimples',function()
     local source = source
     local user_id = getUserId(source)
     local identity = getUserIdentity(user_id)
@@ -173,8 +173,8 @@ AddEventHandler('item_r_ProcuradoSimples',function()
                 config.startanim(source)
                 TriggerClientEvent("progress", source, 15000, "HACKEANDO")
                 SetTimeout(15000, function()
-                    TriggerClientEvent('tirandoprocurado',user_id,true)
-                    setUData(user_id,"vRP:Procurado",0)
+                    TriggerClientEvent('ds:tirandoprocurado',user_id,true)
+                    setUData(user_id,"DosSantos:Procurado",0)
                     TriggerClientEvent("vrp_sound:source", source, 'finish', 0.5)
                     TriggerClientEvent('cancelando', source, false)
                     config.stopanim(source)
@@ -191,7 +191,7 @@ AddEventHandler("vRP:playerSpawn",function(user_id,source,first_spawn)
     local playerWanted = vRP.getUserSource(parseInt(user_id))
     if playerWanted then
         SetTimeout(10000,function()
-            local value = getUData(parseInt(user_id),"vRP:Procurado")
+            local value = getUData(parseInt(user_id),"DosSantos:Procurado")
             local tempo = json.decode(value) or -1
         
             if tempo == -1 then
@@ -199,7 +199,7 @@ AddEventHandler("vRP:playerSpawn",function(user_id,source,first_spawn)
             end
         
             if tempo > 0 then
-                TriggerClientEvent('Procurado:IniciouProcura',playerWanted,true)
+                TriggerClientEvent('DS:IniciouProcura',playerWanted,true)
             end
         end)
     end
@@ -231,19 +231,3 @@ function elite.chamouPolicia2()
         end
     end
 end
-
--- AddEventHandler('onResourceStart', function(resourceName)
--- 	if (GetCurrentResourceName() ~= resourceName) then
--- 	  return
--- 	end
--- 	print(resourceName,'^2INICIADO^0')
--- 	Wait(10000)
--- 	print( "[+] ^2Autenticado^0 - Qualquer dúvida entre em contato com -> ^4dossantosrp.")
--- end)
-
--- AddEventHandler('onResourceStop', function(resourceName)
--- 	if (GetCurrentResourceName() ~= resourceName) then
--- 	  return
--- 	end
--- 	print(resourceName,'^1PARADO^0')
--- end)
